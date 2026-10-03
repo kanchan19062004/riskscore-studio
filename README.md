@@ -2,6 +2,10 @@
 
 Full-stack **fintech transaction risk scoring** product (Project 1 of 3).
 
+**Live demo:** [riskscore-studio.vercel.app](https://riskscore-studio.vercel.app) · API health: [riskscore-api-snwv.onrender.com/health](https://riskscore-api-snwv.onrender.com/health)
+
+> Hosted on free tiers (Vercel, Render, Neon, Upstash). The API sleeps when idle, so the first request can take 30–50 seconds.
+
 Applies an IIT Mandi Minor in AI & Data Science (**AI101 + ML201**) inside a real product shell: auth, caching, Docker, and CI.
 
 | Layer | Stack |
@@ -129,6 +133,19 @@ docker compose up --build
 
 ---
 
+## Deployment (free tier)
+
+| Part | Host | Notes |
+|---|---|---|
+| Web (`apps/web`) | Vercel | Function region `sin1`; `API_URL` points at the Render API |
+| API (`apps/api`) | Render (Docker) | Root directory `apps/api`; runs migrations on start |
+| Postgres | Neon (Singapore) | Connection string with `?sslmode=require` |
+| Redis | Upstash | Must use `rediss://` (TLS) |
+
+The trained model file lives on the API container's disk, which the free plan wipes on every restart. After a restart, an admin retrains from the Models page.
+
+---
+
 ## Tests & CI
 
 ```bash
@@ -153,7 +170,6 @@ GitHub Actions runs on every push/PR (`.github/workflows/ci.yml`): API lint, mig
 | 4 Predict + Redis cache | Done |
 | 5 Dashboard + history | **Done** |
 | 6 Security hardening | **Done** |
-| 7 CI polish | Scaffolded |
 | 7 CI polish | Scaffolded |
 | 8 LinkedIn-ready README | Pending |
 
